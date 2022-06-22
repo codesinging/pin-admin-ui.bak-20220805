@@ -13,4 +13,7 @@ export const authConfig = {
     login: '/login',
     tokenKey: 'auth_token',
     userKey: 'auth_user',
+    excludes: [
+        '/login',
+    ],
 }
