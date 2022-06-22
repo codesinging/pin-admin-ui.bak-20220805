@@ -201,6 +201,15 @@
     "@vueuse/shared" "8.7.4"
     vue-demi "*"
 
+"@vueuse/core@^8.7.4":
+  version "8.7.4"
+  resolved "https://registry.npmjs.org/@vueuse/core/-/core-8.7.4.tgz#39cec3e63faa8943be67121a176fbd84939c2b80"
+  integrity sha512-dQgxjb79PDcizlaclgCkCzNoqNv12PnbXxUOFL9VacakmD/ACoSMWwTpcG3HKoDoYyl2V3kSW/8AkvXGEYEGFA==
+  dependencies:
+    "@vueuse/metadata" "8.7.4"
+    "@vueuse/shared" "8.7.4"
+    vue-demi "*"
+
 "@vueuse/metadata@8.7.4":
   version "8.7.4"
   resolved "https://registry.npmjs.org/@vueuse/metadata/-/metadata-8.7.4.tgz"
