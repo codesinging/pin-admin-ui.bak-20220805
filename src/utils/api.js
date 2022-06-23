@@ -85,3 +85,5 @@ class Api {
         return this.delete(typeof data === 'object' ? data.id : data)
     }
 }
+
+export default (resource = null, id = null) => new Api(resource, id)
