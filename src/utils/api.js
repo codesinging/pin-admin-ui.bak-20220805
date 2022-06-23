@@ -4,9 +4,8 @@ class Api {
     _paths = []
     _config = {}
 
-    constructor(resource = null, id = null) {
-        resource !== null && this._paths.push(resource)
-        id !== null && this._paths.push(id)
+    constructor(...paths) {
+        this._paths = paths
     }
 
     config(config = {}) {
@@ -44,46 +43,51 @@ class Api {
         return this
     }
 
-    url(path) {
-        path = path ? (Array.isArray(path) ? path : [path]) : []
-        return this._paths.concat(path).join('/')
+    url(...paths) {
+        this._paths.concat(paths)
+        return this
     }
 
-    get(path) {
-        return http.get(this.url(path), this._config)
+    _url(){
+        return this._paths.join('/')
     }
 
-    post(path, data) {
-        return http.post(this.url(path), data, this._config)
+    get(params = []) {
+        this.params(params)
+        return http.get(this._url(), this._config)
     }
 
-    put(path, data) {
-        return http.put(this.url(path), data, this._config)
+    post(data) {
+        return http.post(this._url(), data, this._config)
     }
 
-    delete(path) {
-        return http.delete(this.url(path), this._config)
+    put(data) {
+        return http.put(this._url(), data, this._config)
     }
 
-    list() {
-        return this.get()
+    delete() {
+        return http.delete(this._url(), this._config)
+    }
+
+    list(params = []) {
+        return this.get(params)
     }
 
     store(data) {
-        return this.post(null, data)
+        return this.post(data)
     }
 
     update(data) {
-        return this.put(data.id, data)
+        return this.url(data.id).put(data)
     }
 
-    show(data) {
-        return this.get(typeof data === 'object' ? data.id : data)
+    show(id) {
+        return this.url(id).get()
     }
 
-    destroy(data) {
-        return this.delete(typeof data === 'object' ? data.id : data)
+    destroy(id) {
+        return this.url(id).delete()
     }
 }
 
-export default (resource = null, id = null) => new Api(resource, id)
+export default (...paths) => new Api(...paths)
