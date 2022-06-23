@@ -19,6 +19,14 @@ export const warning = (message) => {
     })
 }
 
+export const info = (message) => {
+    ElMessage({
+        type: 'info',
+        message,
+        showClose: true,
+    })
+}
+
 export const error = (message) => {
     ElMessage({
         type: 'error',
