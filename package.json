@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@icon-park/vue-next": "^1.4.1",
     "@vueuse/core": "^8.7.4",
     "axios": "^0.27.2",
     "element-plus": "^2.2.6",
