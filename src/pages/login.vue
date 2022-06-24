@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center justify-center h-screen">
         <el-card class="w-96" header="管理员登录">
-            <el-form :model="data" ref="form" :rules="rules" @keyup.enter="submit" :disabled="statuses.submit||statuses.redirect">
+            <el-form :model="data" ref="form" :rules="rules" @keyup.enter="submit" :disabled="status.status.submit||status.status.redirect">
                 <el-form-item prop="username">
                     <el-input v-model="data.username" placeholder="请输入登录账号">
                         <template #prepend>
@@ -18,7 +18,7 @@
                 </el-form-item>
 
                 <div class="mt-2">
-                    <el-button type="primary" @click="submit" class="w-full" :loading="statuses.submit||statuses.redirect">登录</el-button>
+                    <el-button type="primary" @click="submit" class="w-full" :loading="status.status.submit||status.status.redirect">登录</el-button>
                 </div>
             </el-form>
         </el-card>
@@ -36,7 +36,6 @@ import {appConfig} from "../config";
 
 const router = useRouter()
 const status = useStatus()
-const statuses = status.status
 
 const data = reactive({
     username: import.meta.env.VITE_ADMIN_USERNAME,
