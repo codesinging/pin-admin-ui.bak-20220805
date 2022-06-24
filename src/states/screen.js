@@ -20,3 +20,5 @@ const useScreen = defineStore('screen', {
         }
     }
 })
+
+export default useScreen
