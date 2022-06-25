@@ -147,12 +147,12 @@ export default {
         return handle(http.get(url, config), config)
     },
 
-    post: (url, data, config = {}) => {
+    post: (url, data = {}, config = {}) => {
         config = initConfig(config)
         return handle(http.post(url, data, config), config)
     },
 
-    put: (url, data, config = {}) => {
+    put: (url, data = {}, config = {}) => {
         config = initConfig(config)
         return handle(http.put(url, data, config), config)
     },

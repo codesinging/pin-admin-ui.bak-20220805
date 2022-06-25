@@ -1,2 +1,6 @@
 @import "./vendor/tailwindcss.css";
 @import "./vendor/icon-park.css";
+@import "./vendor/bootstrap-icons.css";
+
+@import "./resets/menu.css";
+@import "./resets/tabs.css";

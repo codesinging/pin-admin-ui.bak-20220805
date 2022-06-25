@@ -10,9 +10,9 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
     if (to.path === '/') {
-        return {path: appConfig.home}
+        return appConfig.home
     } else if (!authConfig.excludes.includes(to.path) && !auth.check()) {
-        return {path: authConfig.login}
+        return authConfig.login
     }
 })
 

@@ -38,7 +38,7 @@ class Api {
         return this
     }
 
-    catch(returnCatch) {
+    catch(returnCatch = true) {
         this._config.catch = !!returnCatch
         return this
     }

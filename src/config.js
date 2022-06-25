@@ -11,6 +11,7 @@ export const storageConfig = {
 export const authConfig = {
     expire: 3600000,
     login: '/login',
+    forbidden: '/forbidden',
     tokenKey: 'auth_token',
     userKey: 'auth_user',
     excludes: [
@@ -24,4 +25,10 @@ export const httpConfig = {
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
     },
+}
+
+export const layoutConfig = {
+    collapsed: false,
+    sidebarWidth: 200,
+    sidebarCollapseWidth: 54,
 }
