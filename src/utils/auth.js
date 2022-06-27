@@ -14,11 +14,15 @@ const logout = () => {
     storage.remove(authConfig.userKey)
 }
 
+const fresh = () => storage.set(authConfig.tokenKey, token(), authConfig.expire)
+
 const check = () => {
     if (token() === null || user() === null) {
         logout()
         return false
     }
+
+    fresh()
 
     return true
 }
