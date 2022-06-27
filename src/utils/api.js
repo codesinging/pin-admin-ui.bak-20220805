@@ -44,11 +44,11 @@ class Api {
     }
 
     url(...paths) {
-        this._paths.concat(paths)
+        this._paths = this._paths.concat(paths)
         return this
     }
 
-    _url(){
+    _url() {
         return this._paths.join('/')
     }
 
