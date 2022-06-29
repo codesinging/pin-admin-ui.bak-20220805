@@ -97,7 +97,7 @@ const handle = (request, config) => {
                 let error = `[${res.data?.code}]${res.data.message || res.statusText || '请求响应结果错误'}`
 
                 showError(error, config)
-                showLog('[900100]http response status error', error)
+                showLog('[800100]http response status error', error)
 
                 if (config.catch) {
                     reject(error)
@@ -111,13 +111,13 @@ const handle = (request, config) => {
             content = (status === null || status === undefined) ? '网络或服务器连接错误' : `[${status}]${content}`
 
             if (status === 401) {
-                showError('[900101]授权令牌失效，请重新登录')
+                showError('[800101]授权令牌失效，请重新登录')
                 auth.logout()
             } else {
                 showError(content, config)
             }
 
-            showLog('[900102]http response error', detail)
+            showLog('[800102]http response error', detail)
 
             if (config.catch) {
                 reject(content)
