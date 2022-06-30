@@ -4,3 +4,6 @@
 
 @import "./resets/menu.css";
 @import "./resets/tabs.css";
+@import "./resets/dialog.css";
+@import "./resets/message-box.css";
+@import "./resets/input.css";

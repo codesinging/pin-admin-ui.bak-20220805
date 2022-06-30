@@ -1,8 +1,8 @@
 <template>
-    <el-dialog v-model="modelValue" @close="onClose" :width="width" :top="top" :fullscreen="attrs.fullscreen" v-bind="attributes">
-        <template #title>
+    <el-dialog v-model="modelValue" @close="onClose" :width="width" :top="top" :fullscreen="attrs.fullscreen" v-bind="attributes" destroy-on-close draggable>
+        <template #header>
             <div class="flex items-center space-x-2">
-                <edit/>
+                <component v-if="icon" :is="icon"></component>
                 <span>{{ title }}</span>
                 <loading-icon v-if="loading"/>
             </div>
@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import {Edit, Plus, Minus, FullScreen} from "@icon-park/vue-next";
+import {Plus, Minus, FullScreen} from "@icon-park/vue-next";
 import LoadingIcon from '../icons/LoadingIcon.vue'
 import {useStorage} from "../../utils/storage";
 import {computed, getCurrentInstance, reactive} from "vue";
@@ -46,6 +46,7 @@ defineProps({
     title: String,
     attributes: Object,
     loading: Boolean,
+    icon: Object,
 })
 
 const storage = useStorage('component_' + getCurrentInstance().uid)

@@ -1,11 +1,11 @@
 <template>
     <div class="flex-1 overflow-hidden p-4">
         <router-view v-slot="{Component}">
-            <keep-alive>
-                <el-scrollbar>
+            <el-scrollbar>
+                <keep-alive>
                     <component :is="Component"></component>
-                </el-scrollbar>
-            </keep-alive>
+                </keep-alive>
+            </el-scrollbar>
         </router-view>
     </div>
 </template>
@@ -22,7 +22,7 @@ const layout = useLayout()
 
 const permitted = computed(() => layout.hasPage(route.path))
 
-if (permitted){
+if (!permitted.value) {
     router.push(authConfig.forbidden)
 }
 </script>
