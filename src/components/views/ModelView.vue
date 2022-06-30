@@ -3,6 +3,7 @@
         <div class="flex items-center space-x-2">
             <el-button v-if="!hideAddButton" @click="onAdd" type="primary" :icon="Plus">新增</el-button>
             <el-button v-if="!hideRefreshButton" @click="onRefresh" :icon="Refresh" :loading="status.status.refresh">刷新</el-button>
+            <slot name="header-actions"></slot>
         </div>
 
         <div v-if="hasSearch" class="flex items-center space-x-2">
