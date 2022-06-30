@@ -55,22 +55,22 @@
         ></el-pagination>
     </div>
 
-    <extended-dialog v-model="editDialog.visible" :title="editDialog.title" :icon="Edit" :close-on-click-modal="false" :loading="status.status.show">
+    <extended-dialog v-model="editDialog.states.visible" :title="editDialog.states.title" :icon="editDialog.icon" :close-on-click-modal="false" :loading="editDialog.loading()">
         <el-form ref="editForm" :model="editData" label-position="top" v-bind="formAttributes" @keyup.enter="onSubmit" :disabled="status.status.submit">
             <slot name="form-items" :data="editData" :list="lister.data" :isUpdate="isUpdate"></slot>
         </el-form>
 
         <template #actions>
-            <el-button @click="closeEditDialog">取消</el-button>
+            <el-button @click="editDialog.close()">取消</el-button>
             <el-button @click="onSubmit" type="primary" :loading="status.status.submit">保存</el-button>
         </template>
     </extended-dialog>
 
-    <extended-dialog v-model="viewDialog.visible" :title="viewDialog.title" :icon="DocDetail" :loading="status.status.show">
-        <extended-descriptions :data="viewData" :fields="viewFields"></extended-descriptions>
+    <extended-dialog v-model="viewDialog.states.visible" :title="viewDialog.states.title" :icon="viewDialog.icon" :loading="viewDialog.loading()">
+        <extended-descriptions :data="viewData" :fields="viewFields" :depth="viewDepth"></extended-descriptions>
 
         <template #actions>
-            <el-button @click="closeViewDialog">关闭</el-button>
+            <el-button @click="viewDialog.close()">关闭</el-button>
         </template>
     </extended-dialog>
 </template>
@@ -85,6 +85,7 @@ import {warning} from "../../utils/message";
 import {confirm} from "../../utils/messageBox";
 import ExtendedDialog from "../extensions/ExtendedDialog.vue";
 import ExtendedDescriptions from "../extensions/ExtendedDescriptions.vue";
+import useDialog from "../../utils/dialog";
 
 const status = useStatus()
 const route = useRoute()
@@ -148,6 +149,12 @@ const props = defineProps({
     viewFields: {
         type: Object,
         default: () => ({}),
+    },
+
+    // 查看详情的展示层级
+    viewDepth: {
+        type: [String, Number],
+        default: 2,
     }
 })
 
@@ -187,13 +194,7 @@ const update = (scope, action = null) => apis().label(cellLabel(scope, action)).
 })
 
 // 编辑对话框参数
-const editDialog = reactive({
-    visible: false,
-    width: 30,
-    top: 15,
-    fullscreen: false,
-    title: '',
-})
+const editDialog = useDialog('编辑', Edit)
 
 // 编辑表单数据
 const editData = ref({})
@@ -203,18 +204,6 @@ const isUpdate = computed(() => !!editData.value['id'])
 
 // 编辑表单元素
 const editForm = ref()
-
-// 显示编辑对话框
-const showEditDialog = title => {
-    editDialog.title = title
-    editDialog.visible = true
-}
-
-// 关闭编辑对话框
-const closeEditDialog = () => {
-    editDialog.title = ''
-    editDialog.visible = false
-}
 
 // 提交表单数据
 const onSubmit = () => {
@@ -227,7 +216,7 @@ const onSubmit = () => {
                 : apis().label('submit').store(data)
 
             request.then(res => {
-                closeEditDialog()
+                editDialog.close()
                 refresh()
             })
         } else {
@@ -239,16 +228,16 @@ const onSubmit = () => {
 // 点击新增按钮
 const onAdd = () => {
     editData.value = Object.assign({}, props.formDefault)
-    showEditDialog('新增')
+    editDialog.open('新增')
 }
 
 // 点击修改按钮
 const onEdit = row => {
     editData.value = Object.assign({}, row)
 
-    apis().label('show').show(row.id).then(res => editData.value = res)
+    apis().label(editDialog.label).show(row.id).then(res => editData.value = res)
 
-    showEditDialog('编辑')
+    editDialog.open('编辑')
 }
 
 // 所有插槽
@@ -273,19 +262,7 @@ const search = () => {
 }
 
 // 查看对话框参数
-const viewDialog = reactive({
-    visible: false,
-    width: 30,
-    top: 15,
-    fullscreen: false,
-    title: '查看详情',
-})
-
-// 打开查看对话框
-const showViewDialog = () => viewDialog.visible = true
-
-// 关闭查看对话框
-const closeViewDialog = () => viewDialog.visible = false
+const viewDialog = useDialog('查看详情', DocDetail)
 
 // 查看对话框详情数据
 const viewData = ref({})
@@ -293,8 +270,8 @@ const viewData = ref({})
 // 点击查看按钮
 const onView = row => {
     viewData.value = Object.assign({}, row)
-    apis().label('show').show(row.id).then(res => viewData.value = res)
-    showViewDialog()
+    apis().label(viewDialog.label).show(row.id).then(res => viewData.value = res)
+    viewDialog.open()
 }
 
 // 删除
