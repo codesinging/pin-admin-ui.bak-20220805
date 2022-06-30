@@ -38,9 +38,7 @@ layout.load().then(() => {
     screen.hide(500)
 })
 
-
 screen.show('加载中')
-
 </script>
 
 <style scoped>
