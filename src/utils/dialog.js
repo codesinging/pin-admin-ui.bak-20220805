@@ -5,6 +5,7 @@ class Dialog {
     states = reactive({
         visible: false,
         title: '',
+        subtitle: '',
     })
 
     icon = null
@@ -17,8 +18,8 @@ class Dialog {
         this.label = 'dialog_' + new Date().getTime()
     }
 
-    open(title) {
-        title && (this.states.title = title)
+    open(subtitle) {
+        subtitle && (this.states.subtitle = subtitle)
         this.states.visible = true
     }
 
@@ -26,7 +27,7 @@ class Dialog {
         this.states.visible = false
     }
 
-    loading(){
+    loading() {
         const status = useStatus()
         return status.get(this.label)
     }

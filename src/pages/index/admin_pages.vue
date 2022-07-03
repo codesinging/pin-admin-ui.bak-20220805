@@ -3,8 +3,7 @@
         <template #table-columns>
             <el-table-column label="页面名称" prop="name"></el-table-column>
             <el-table-column label="页面路径" prop="path"></el-table-column>
-
-            <switch-column label="公开" prop="public"/>
+            <switch-column label="公共" prop="public"/>
             <status-column/>
         </template>
 
@@ -17,7 +16,7 @@
                 <el-input v-model="data.path"></el-input>
             </el-form-item>
 
-            <el-form-item label="是否公开页面" prop="public">
+            <el-form-item label="是否公共页面" prop="public">
                 <el-switch v-model="data.public"></el-switch>
             </el-form-item>
 

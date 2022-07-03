@@ -11,6 +11,9 @@ const useStatus = defineStore('status', {
         get: state => {
             return (...keys) => !!state.status[keys.join('_')]
         },
+        any: state => {
+            return (...labels) => labels.map(label => state.status[label]).every(status => !!status)
+        }
     },
 
     actions: {

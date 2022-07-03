@@ -16,7 +16,7 @@
                     <switch-updater v-if="scope.row.children.length>0" :scope="scope" prop="opened"/>
                 </template>
             </el-table-column>
-            <switch-column label="公开" prop="public"/>
+            <switch-column label="公共" prop="public"/>
             <status-column/>
         </template>
 
@@ -45,7 +45,7 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="公开" prop="public">
+            <el-form-item label="公共" prop="public">
                 <el-switch v-model="data.public"></el-switch>
             </el-form-item>
 
@@ -76,7 +76,7 @@ const fields = reactive({
     name: '菜单名称',
     icon: '菜单图标',
     sort: '排列序号',
-    public: '是否公开菜单',
+    public: '是否公共菜单',
     default: '是否默认菜单',
     opened: '是否默认展开',
     status: '状态',

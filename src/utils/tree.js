@@ -56,3 +56,19 @@ export const treePath = (arr = [], key, value) => {
     }
     return []
 }
+
+const _flatten = (tree, arr = [], depth = 0) => {
+    tree.forEach(obj => {
+        const item = {...obj}
+        delete item.children
+        item.depth = depth
+        arr.push(item)
+        if (obj.children && obj.children.length) {
+            arr.concat(_flatten(obj.children, arr, depth + 1))
+        }
+    })
+
+    return arr
+}
+
+export const flatten = _flatten

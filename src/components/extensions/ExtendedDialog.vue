@@ -4,6 +4,7 @@
             <div class="flex items-center space-x-2">
                 <component v-if="icon" :is="icon"></component>
                 <span>{{ title }}</span>
+                <span class="text-gray-400 text-sm">{{ subtitle }}</span>
                 <loading-icon v-if="loading"/>
             </div>
         </template>
@@ -44,6 +45,7 @@ import {computed, getCurrentInstance, reactive} from "vue";
 defineProps({
     modelValue: Boolean,
     title: String,
+    subtitle: String,
     attributes: Object,
     loading: Boolean,
     icon: Object,
@@ -80,10 +82,11 @@ const toggleFullscreen = () => {
 const canZoomOut = computed(() => attrs.width < 100)
 const canZoomIn = computed(() => attrs.width > 40)
 
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits(['update:modelValue', 'closed'])
 
 const onClose = () => {
     emits('update:modelValue', false)
+    emits('closed')
 }
 </script>
 

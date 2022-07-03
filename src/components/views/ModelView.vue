@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <el-table :data="lister.data" v-loading="status.status.refresh" border table-layout="auto" default-expand-all row-key="id" :indent="15" class="mt-2">
+    <el-table :data="lister.data" v-loading="status.status.refresh" border table-layout="auto" flexible default-expand-all row-key="id" :indent="15" class="mt-2">
         <el-table-column v-if="!hideIdColumn" type="id" label="ID" prop="id" align="center"></el-table-column>
 
         <slot name="table-columns"></slot>
