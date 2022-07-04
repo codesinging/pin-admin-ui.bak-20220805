@@ -42,20 +42,28 @@ import LoadingIcon from '../icons/LoadingIcon.vue'
 import {useStorage} from "../../utils/storage";
 import {computed, getCurrentInstance, reactive} from "vue";
 
-defineProps({
+const props = defineProps({
     modelValue: Boolean,
     title: String,
     subtitle: String,
     attributes: Object,
     loading: Boolean,
     icon: Object,
+    width: {
+        type: [String,Number],
+        default: 80,
+    },
+    top: {
+        type: [String,Number],
+        default: 20,
+    },
 })
 
 const storage = useStorage('component_' + getCurrentInstance().uid)
 
 const attrs = reactive(storage.get({
-    width: 60,
-    top: 20,
+    width: props.width,
+    top: props.top,
     fullscreen: false,
 }))
 
