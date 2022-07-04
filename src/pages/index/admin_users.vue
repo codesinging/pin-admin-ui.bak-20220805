@@ -16,7 +16,7 @@
                     <div v-if="!row.super" class="space-x-1">
                         <el-button size="small" link type="primary" @click="openRoleDialog(row)">分配角色</el-button>
                         <el-button size="small" link type="primary" @click="openPermissionDialog(row)">设置权限</el-button>
-                        <el-button size="small" link type="primary" @click="openPermissionDialog(row)">查看权限</el-button>
+                        <el-button size="small" link type="primary" @click="openPermissionableDialog(row)">查看权限</el-button>
                     </div>
                 </template>
             </el-table-column>
@@ -40,6 +40,7 @@
 
     <extended-dialog v-model="roleDialog.states.visible" :title="roleDialog.states.title" :subtitle="roleDialog.states.subtitle" :icon="roleDialog.icon" :loading="roleDialog.loading()">
         <el-table ref="roleTable" :data="roles" border table-layout="auto" v-loading="roleDialog.loading()" @selection-change="onRoleSelectionChange">
+            <el-table-column type="index" align="center"></el-table-column>
             <el-table-column label="角色名称" prop="name"></el-table-column>
             <el-table-column label="角色描述" prop="description"></el-table-column>
             <el-table-column type="selection" align="center"></el-table-column>
@@ -51,7 +52,15 @@
         </template>
     </extended-dialog>
 
-    <extended-dialog v-model="permissionDialog.states.visible" :title="permissionDialog.states.title" :subtitle="permissionDialog.states.subtitle" :icon="roleDialog.icon" :loading="permissionLoading">
+    <extended-dialog
+        v-model="permissionDialog.states.visible"
+        :title="permissionDialog.states.title"
+        :subtitle="permissionDialog.states.subtitle"
+        :icon="permissionDialog.icon"
+        :loading="permissionLoading"
+        :width="80"
+        :top="20"
+    >
         <el-tabs v-model="permissionTab" type="card" class="mb-4">
             <el-tab-pane label="页面权限" name="page">
                 <el-table ref="pageTable" :data="pages" border table-layout="auto" v-loading="permissionLoading" @selection-change="onPageSelectionChange">
@@ -82,7 +91,8 @@
             <el-tab-pane label="动作权限" name="action">
                 <el-table ref="actionTable" :data="actions" border table-layout="auto" v-loading="permissionLoading" @selection-change="onActionSelectionChange">
                     <el-table-column type="index" align="center"></el-table-column>
-                    <merged-column label="控制器-动作" :props="['controller_name', 'action_name']" merger="-"></merged-column>
+                    <merged-column label="控制器名-动作名" :props="['controller_name', 'action_name']" merger="-"></merged-column>
+                    <merged-column label="控制器-动作" :props="['controller', 'action']" merger="@"></merged-column>
                     <el-table-column label="权限ID" prop="permission.id" align="center"></el-table-column>
                     <el-table-column label="权限名" prop="permission.name"></el-table-column>
                     <el-table-column type="selection" align="center"></el-table-column>
@@ -95,6 +105,76 @@
         <template #actions>
             <el-button @click="permissionDialog.close()">取消</el-button>
             <el-button type="primary" @click="savePermissions" :loading="status.status.save">保存</el-button>
+        </template>
+    </extended-dialog>
+
+    <extended-dialog
+        v-model="permissionableDialog.states.visible"
+        :title="permissionableDialog.states.title"
+        :subtitle="permissionableDialog.states.subtitle"
+        :icon="permissionableDialog.icon"
+        :loading="permissionableDialog.loading()"
+        :width="80"
+        :top="20"
+    >
+        <el-tabs v-model="permissionableTab" type="card">
+            <el-tab-pane label="页面权限" name="page">
+                <el-table :data="permissionablePages" border table-layout="auto" v-loading="permissionableDialog.loading()">
+                    <el-table-column type="index" align="center"></el-table-column>
+                    <el-table-column label="页面名称" prop="permissionable.name"></el-table-column>
+                    <el-table-column label="页面路径" prop="permissionable.path"></el-table-column>
+                    <el-table-column label="权限ID" prop="id" align="center"></el-table-column>
+                    <el-table-column label="权限名" prop="name"></el-table-column>
+                    <el-table-column label="权限来源" align="center">
+                        <template #default="{row}">
+                            <el-tag v-if="row.pivot.model_type==='App\\Models\\AdminUser'">直接权限</el-tag>
+                            <el-tag v-else type="success">角色权限</el-tag>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="菜单权限" name="menu">
+                <el-table :data="permissionableMenus" border table-layout="auto" v-loading="permissionableDialog.loading()">
+                    <el-table-column type="index" align="center"></el-table-column>
+                    <el-table-column label="菜单名称" prop="permissionable.name"></el-table-column>
+                    <el-table-column label="菜单名称" prop="permissionable.page.name"></el-table-column>
+                    <el-table-column label="页面路径" prop="permissionable.page.path"></el-table-column>
+                    <el-table-column label="权限ID" prop="id" align="center"></el-table-column>
+                    <el-table-column label="权限名" prop="name"></el-table-column>
+                    <el-table-column label="权限来源" align="center">
+                        <template #default="{row}">
+                            <el-tag v-if="row.pivot.model_type==='App\\Models\\AdminUser'">直接权限</el-tag>
+                            <el-tag v-else type="success">角色权限</el-tag>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="动作权限" name="action">
+                <el-table :data="permissionableActions" border table-layout="auto" v-loading="permissionableDialog.loading()">
+                    <el-table-column type="index" align="center"></el-table-column>
+                    <el-table-column label="控制器名-动作名">
+                        <template #default="{row}">
+                            {{ row.permissionable.controller_name }}-{{ row.permissionable.action_name }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="控制器-动作">
+                        <template #default="{row}">
+                            {{ row.permissionable.controller }}@{{ row.permissionable.action }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="权限ID" prop="id" align="center"></el-table-column>
+                    <el-table-column label="权限名" prop="name"></el-table-column>
+                    <el-table-column label="权限来源" align="center">
+                        <template #default="{row}">
+                            <el-tag v-if="row.pivot.model_type==='App\\Models\\AdminUser'">直接权限</el-tag>
+                            <el-tag v-else type="success">角色权限</el-tag>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+        </el-tabs>
+        <template #actions>
+            <el-button @click="permissionableDialog.close()">关闭</el-button>
         </template>
     </extended-dialog>
 </template>
@@ -211,6 +291,25 @@ const savePermissions = () => {
 
     api('admin_users', user.value.id, 'permit').label('save').put({permissions: permissionIds}).then(() => permissionDialog.close())
 }
+
+const permissionableDialog = useDialog('查看权限', Permissions)
+
+const openPermissionableDialog = (row) => {
+    user.value = row
+    permissionableDialog.open(`查看用户 ${user.value.name} 的权限`)
+    refreshPermissionables()
+}
+
+const permissionables = ref([])
+const permissionableTab = ref('page')
+
+const refreshPermissionables = () => {
+    api('admin_users', user.value.id, 'permissions').label(permissionableDialog.label).get().then(res => permissionables.value = res)
+}
+
+const permissionablePages = computed(() => permissionables.value.filter(item => item.permissionable_type === 'App\\Models\\AdminPage'))
+const permissionableMenus = computed(() => permissionables.value.filter(item => item.permissionable_type === 'App\\Models\\AdminMenu'))
+const permissionableActions = computed(() => permissionables.value.filter(item => item.permissionable_type === 'App\\Models\\AdminAction'))
 </script>
 
 <style scoped>
