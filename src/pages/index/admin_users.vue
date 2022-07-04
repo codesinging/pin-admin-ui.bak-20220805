@@ -127,8 +127,8 @@
                     <el-table-column label="权限名" prop="name"></el-table-column>
                     <el-table-column label="权限来源" align="center">
                         <template #default="{row}">
-                            <el-tag v-if="row.pivot.model_type==='App\\Models\\AdminUser'">直接权限</el-tag>
-                            <el-tag v-else type="success">角色权限</el-tag>
+                            <el-tag v-if="row.pivot.model_type==='App\\Models\\AdminUser'">用户</el-tag>
+                            <el-tag v-else type="success">角色</el-tag>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -143,8 +143,8 @@
                     <el-table-column label="权限名" prop="name"></el-table-column>
                     <el-table-column label="权限来源" align="center">
                         <template #default="{row}">
-                            <el-tag v-if="row.pivot.model_type==='App\\Models\\AdminUser'">直接权限</el-tag>
-                            <el-tag v-else type="success">角色权限</el-tag>
+                            <el-tag v-if="row.pivot.model_type==='App\\Models\\AdminUser'">用户</el-tag>
+                            <el-tag v-else type="success">角色</el-tag>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -166,8 +166,8 @@
                     <el-table-column label="权限名" prop="name"></el-table-column>
                     <el-table-column label="权限来源" align="center">
                         <template #default="{row}">
-                            <el-tag v-if="row.pivot.model_type==='App\\Models\\AdminUser'">直接权限</el-tag>
-                            <el-tag v-else type="success">角色权限</el-tag>
+                            <el-tag v-if="row.pivot.model_type==='App\\Models\\AdminUser'">用户</el-tag>
+                            <el-tag v-else type="success">角色</el-tag>
                         </template>
                     </el-table-column>
                 </el-table>
