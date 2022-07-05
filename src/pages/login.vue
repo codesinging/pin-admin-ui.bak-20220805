@@ -53,7 +53,7 @@ const submit = () => {
     form.value.validate(valid => {
         if (valid) {
             api('auth/login').label('submit').catch().put(data).then(res => {
-                auth.login(res.token, res.admin)
+                auth.set(res.token, res.admin)
 
                 status.set('redirect')
 

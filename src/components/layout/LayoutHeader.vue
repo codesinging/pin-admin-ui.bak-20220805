@@ -30,14 +30,13 @@
 
 <script setup>
 import useLayout from "../../states/layout";
-import {useRouter} from "vue-router";
-import useScreen from "../../states/screen";
 import {useFullscreen} from "@vueuse/core";
 import {computed} from "vue";
 import auth from "../../utils/auth";
-import api from "../../utils/api";
-import {authConfig} from "../../config";
 import {FullScreen, OffScreen, User} from "@icon-park/vue-next";
+import {useRouter} from "vue-router";
+import useScreen from "../../states/screen";
+import {authConfig} from "../../config";
 
 const layout = useLayout()
 const router = useRouter()
@@ -52,9 +51,7 @@ const changePassword = () => layout.openPage('/auth_password')
 const logout = () => {
     screen.show('注销登录')
 
-    api('auth/logout').catch(true).put().finally(() => {
-        auth.logout()
-        layout.clear()
+    auth.logout().then(() => {
         router.push(authConfig.login).then(() => screen.hide())
     })
 }
