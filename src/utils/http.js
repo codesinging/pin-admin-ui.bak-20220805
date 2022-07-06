@@ -2,7 +2,7 @@ import message from "./message";
 import useStatus from "../states/status";
 import axios from "axios";
 import {httpConfig} from "../config";
-import auth from "./auth";
+import useAuth from "../states/auth.js";
 
 const defaultLabel = 'loading'
 
@@ -112,7 +112,9 @@ const handle = (request, config) => {
 
             if (status === 401) {
                 showError('[800101]授权令牌失效，请重新登录')
-                auth.logout()
+
+                const auth = useAuth()
+                auth.clear()
             } else {
                 showError(content, config)
             }
@@ -133,6 +135,8 @@ const http = axios.create(httpConfig)
 
 // 请求拦截器中添加认证信息
 http.interceptors.request.use(config => {
+    const auth = useAuth()
+
     if (auth.token()) {
         config.headers.Authorization = 'Bearer ' + auth.token()
     }

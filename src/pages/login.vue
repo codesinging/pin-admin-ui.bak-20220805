@@ -30,12 +30,13 @@ import {reactive, ref} from "vue";
 import api from "../utils/api";
 import {warning} from "../utils/message";
 import useStatus from "../states/status";
-import auth from "../utils/auth";
 import {useRouter} from "vue-router";
 import {appConfig} from "../config";
+import useAuth from "../states/auth.js";
 
 const router = useRouter()
 const status = useStatus()
+const auth = useAuth()
 
 const data = reactive({
     username: import.meta.env.VITE_ADMIN_USERNAME,

@@ -19,7 +19,8 @@
                 </div>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item @click="changePassword"><i class="bi-person mr-1"></i>修改密码</el-dropdown-item>
+                        <el-dropdown-item @click="openPage('/setting/user')"><i class="bi-person mr-1"></i>个人中心</el-dropdown-item>
+                        <el-dropdown-item @click="openPage('/setting/account')"><i class="bi-person mr-1"></i>账号设置</el-dropdown-item>
                         <el-dropdown-item @click="logout" divided><i class="bi-power mr-1"></i>退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
@@ -32,27 +33,30 @@
 import useLayout from "../../states/layout";
 import {useFullscreen} from "@vueuse/core";
 import {computed} from "vue";
-import auth from "../../utils/auth";
 import {FullScreen, OffScreen, User} from "@icon-park/vue-next";
 import {useRouter} from "vue-router";
 import useScreen from "../../states/screen";
 import {authConfig} from "../../config";
+import useAuth from "../../states/auth.js";
+import api from "../../utils/api.js";
 
 const layout = useLayout()
 const router = useRouter()
 const screen = useScreen()
+const auth = useAuth()
 
 const {isFullscreen, toggle: toggleFullscreen} = useFullscreen()
 
-const user = computed(() => auth.user())
+const user = computed(() => auth.user)
 
-const changePassword = () => layout.openPage('/auth_password')
+const openPage = (page) => layout.openPage(page)
 
 const logout = () => {
     screen.show('注销登录')
 
-    auth.logout().then(() => {
-        router.push(authConfig.login).then(() => screen.hide())
+    api('auth/logout').label('logout').catch(true).put().finally(() => {
+        auth.clear()
+        setTimeout(() => router.push(authConfig.login).then(() => screen.hide()), 1000)
     })
 }
 </script>

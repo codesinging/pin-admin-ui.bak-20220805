@@ -14,6 +14,7 @@ export const authConfig = {
     forbidden: '/forbidden',
     tokenKey: 'auth_token',
     userKey: 'auth_user',
+    expireKey: 'auth_expire',
     excludes: [
         '/login',
     ],
