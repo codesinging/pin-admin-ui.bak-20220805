@@ -10,7 +10,7 @@
             </el-table-column>
             <el-table-column label="响应代码" align="center">
                 <template #default="{row}">
-                    <el-tag :type="statusType(row.code)">{{ row.code }}</el-tag>
+                    <el-tag v-if="row.code!==''" :type="statusType(row.code)">{{ row.code }}</el-tag>
                 </template>
             </el-table-column>
             <el-table-column label="响应信息" prop="message"/>
