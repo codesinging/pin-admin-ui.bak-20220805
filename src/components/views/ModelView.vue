@@ -189,9 +189,7 @@ const refresh = (params = {}) => {
 const onRefresh = () => refresh()
 
 // 更新
-const update = (scope, action = null) => apis().label(cellLabel(scope, action)).update(scope.row).then(res => {
-    refresh()
-})
+const update = (scope, action = null) => apis().label(cellLabel(scope, action)).catch().update(scope.row).then(() => refresh()).catch(() => refresh())
 
 // 编辑对话框参数
 const editDialog = useDialog('编辑', Edit)
