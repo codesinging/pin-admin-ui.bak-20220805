@@ -8,7 +8,12 @@
                 <template v-if="Array.isArray(value)">
                     <div class="space-y-2">
                         <template v-for="(item,index) in value" :key="index">
-                            <template v-if="typeof item === 'string' || typeof item === 'number'">{{ item }}</template>
+                            <template v-if="typeof item === 'string' || typeof item === 'number'">
+                                <div class="flex items-center border border-gray-100">
+                                    <div class="w-12 flex-none bg-gray-100 text-center px-2 py-1">{{ index }}</div>
+                                    <div class="flex-auto px-2 py-1">{{ item }}</div>
+                                </div>
+                            </template>
                             <extended-descriptions v-else :data="item" :level="level+1"></extended-descriptions>
                         </template>
                     </div>

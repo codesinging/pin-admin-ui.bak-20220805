@@ -1,8 +1,5 @@
 <template>
-    <el-card>
-        <template #header>
-            <div class="flex items-center">修改密码</div>
-        </template>
+    <el-card header="修改密码">
         <form-view action="auth/password" @after-submit="afterSubmit">
             <template #default="{data}">
                 <el-form-item label="原密码" prop="current_password" :rules="[{required: true, message: '不能为空'}]">
@@ -20,19 +17,22 @@
 </template>
 
 <script setup>
-import FormView from "../../components/views/FormView.vue";
-import auth from "../../utils/auth";
-import useScreen from "../../states/screen";
+import FormView from "../../../components/views/FormView.vue";
+import useScreen from "../../../states/screen";
 import {useRouter} from "vue-router";
-import {authConfig} from "../../config";
+import {authConfig} from "../../../config";
+import useAuth from "../../../states/auth.js";
+import api from "../../../utils/api.js";
 
 const screen = useScreen()
 const router = useRouter()
+const auth = useAuth()
 
 const afterSubmit = data => {
     screen.show('重新登录')
 
-    auth.logout().then(() => {
+    api('auth/logout').label('logout').catch(true).put().finally(() => {
+        auth.clear()
         setTimeout(() => router.push(authConfig.login).then(() => screen.hide()), 1000)
     })
 }

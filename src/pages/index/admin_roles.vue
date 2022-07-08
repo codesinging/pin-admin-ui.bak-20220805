@@ -65,8 +65,8 @@
                     <el-table-column type="selection" align="center"></el-table-column>
                 </el-table>
             </el-tab-pane>
-            <el-tab-pane label="动作权限" name="action">
-                <el-table ref="actionTable" :data="actions" border table-layout="auto" v-loading="giveDialogLoading" @selection-change="onActionSelectionChange">
+            <el-tab-pane label="路由权限" name="route">
+                <el-table ref="routeTable" :data="routes" border table-layout="auto" v-loading="giveDialogLoading" @selection-change="onRouteSelectionChange">
                     <el-table-column type="index" align="center"></el-table-column>
                     <merged-column label="控制器名-动作名" :props="['controller_name', 'action_name']" merger="-"></merged-column>
                     <merged-column label="控制器-动作" :props="['controller', 'action']" merger="@"></merged-column>
@@ -112,8 +112,8 @@
                     <el-table-column label="权限名" prop="name"></el-table-column>
                 </el-table>
             </el-tab-pane>
-            <el-tab-pane label="动作权限" name="action">
-                <el-table :data="permissionableActions" border table-layout="auto" v-loading="viewDialog.loading()">
+            <el-tab-pane label="路由权限" name="route">
+                <el-table :data="permissionableRoutes" border table-layout="auto" v-loading="viewDialog.loading()">
                     <el-table-column type="index" align="center"></el-table-column>
                     <el-table-column label="控制器名-动作名">
                         <template #default="{row}">
@@ -160,15 +160,15 @@ const permissions = ref([])
 
 const pages = ref([])
 const menus = ref([])
-const actions = ref([])
+const routes = ref([])
 
 const selectedPages = ref([])
 const selectedMenus = ref([])
-const selectedActions = ref([])
+const selectedRoutes = ref([])
 
 const pageTable = ref()
 const menuTable = ref()
-const actionTable = ref()
+const routeTable = ref()
 
 const giveTab = ref('page')
 
@@ -183,12 +183,12 @@ const refreshPermissions = () => {
         api('admin_roles', role.value.id, 'permissions').label('permissions').success(false).get(),
         api('admin_pages').label('pages').success(false).list({public: false}),
         api('admin_menus').label('menus').success(false).list({public: false}),
-        api('admin_actions').label('actions').success(false).list(),
+        api('admin_routes').label('routes').success(false).list({public: false}),
     ]).then(responses => {
         permissions.value = responses[0]
         pages.value = responses[1]
         menus.value = flatten(responses[2])
-        actions.value = responses[3]
+        routes.value = responses[3]
 
         nextTick(() => initPermissionSelection())
     })
@@ -199,19 +199,19 @@ const initPermissionSelection = () => {
 
     pages.value.filter(item => permissionIds.includes(item.permission.id)).forEach(item => pageTable.value.toggleRowSelection(item, true))
     menus.value.filter(item => permissionIds.includes(item.permission.id)).forEach(item => menuTable.value.toggleRowSelection(item, true))
-    actions.value.filter(item => permissionIds.includes(item.permission.id)).forEach(item => actionTable.value.toggleRowSelection(item, true))
+    routes.value.filter(item => permissionIds.includes(item.permission.id)).forEach(item => routeTable.value.toggleRowSelection(item, true))
 }
 
 const onPageSelectionChange = selection => selectedPages.value = selection
 const onMenuSelectionChange = selection => selectedMenus.value = selection
-const onActionSelectionChange = selection => selectedActions.value = selection
+const onRouteSelectionChange = selection => selectedRoutes.value = selection
 
-const giveDialogLoading = computed(() => status.any('permissions', 'pages', 'menus', 'actions'))
+const giveDialogLoading = computed(() => status.any('permissions', 'pages', 'menus', 'routes'))
 
 const savePermissions = () => {
     const permissionIds = [].concat(selectedPages.value.map(item => item.permission.id))
         .concat(selectedMenus.value.map(item => item.permission.id))
-        .concat(selectedActions.value.map(item => item.permission.id))
+        .concat(selectedRoutes.value.map(item => item.permission.id))
 
     api('admin_roles', role.value.id, 'permit').label('save').put({permissions: permissionIds}).then(() => giveDialog.close())
 }
@@ -233,7 +233,7 @@ const refreshPermissionables = () => {
 
 const permissionablePages = computed(() => permissionables.value.filter(item => item.permissionable_type === 'App\\Models\\AdminPage'))
 const permissionableMenus = computed(() => permissionables.value.filter(item => item.permissionable_type === 'App\\Models\\AdminMenu'))
-const permissionableActions = computed(() => permissionables.value.filter(item => item.permissionable_type === 'App\\Models\\AdminAction'))
+const permissionableRoutes = computed(() => permissionables.value.filter(item => item.permissionable_type === 'App\\Models\\AdminRoute'))
 
 </script>
 

@@ -2,7 +2,7 @@
     <el-form ref="form" :model="data" :rules="rules" v-bind="attributes" :disabled="submitting" @keyup.enter="submit">
         <slot :data="data"></slot>
 
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center space-x-2 mt-8">
             <el-button @click="reset">重置</el-button>
             <el-button type="primary" @click="submit" :loading="submitting">保存</el-button>
         </div>
@@ -67,7 +67,6 @@ const submit = () => {
 
             request.then(res => {
                 form.value.clearValidate()
-                form.value.resetFields()
                 emits('afterSubmit', res)
             })
         } else {
