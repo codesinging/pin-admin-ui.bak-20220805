@@ -112,9 +112,6 @@ const handle = (request, config) => {
 
             if (status === 401) {
                 showError('[800101]授权令牌失效，请重新登录')
-
-                const auth = useAuth()
-                auth.clear()
             } else {
                 showError(content, config)
             }
