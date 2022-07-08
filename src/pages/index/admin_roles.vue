@@ -92,44 +92,7 @@
         :width="80"
         :top="20"
     >
-        <el-tabs v-model="viewTab" type="card">
-            <el-tab-pane label="页面权限" name="page">
-                <el-table :data="permissionablePages" border table-layout="auto" v-loading="viewDialog.loading()">
-                    <el-table-column type="index" align="center"></el-table-column>
-                    <el-table-column label="页面名称" prop="permissionable.name"></el-table-column>
-                    <el-table-column label="页面路径" prop="permissionable.path"></el-table-column>
-                    <el-table-column label="权限ID" prop="id" align="center"></el-table-column>
-                    <el-table-column label="权限名" prop="name"></el-table-column>
-                </el-table>
-            </el-tab-pane>
-            <el-tab-pane label="菜单权限" name="menu">
-                <el-table :data="permissionableMenus" border table-layout="auto" v-loading="viewDialog.loading()">
-                    <el-table-column type="index" align="center"></el-table-column>
-                    <el-table-column label="菜单名称" prop="permissionable.name"></el-table-column>
-                    <el-table-column label="菜单名称" prop="permissionable.page.name"></el-table-column>
-                    <el-table-column label="页面路径" prop="permissionable.page.path"></el-table-column>
-                    <el-table-column label="权限ID" prop="id" align="center"></el-table-column>
-                    <el-table-column label="权限名" prop="name"></el-table-column>
-                </el-table>
-            </el-tab-pane>
-            <el-tab-pane label="路由权限" name="route">
-                <el-table :data="permissionableRoutes" border table-layout="auto" v-loading="viewDialog.loading()">
-                    <el-table-column type="index" align="center"></el-table-column>
-                    <el-table-column label="控制器名-动作名">
-                        <template #default="{row}">
-                            {{ row.permissionable.controller_name }}-{{ row.permissionable.action_name }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="控制器-动作">
-                        <template #default="{row}">
-                            {{ row.permissionable.controller }}@{{ row.permissionable.action }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="权限ID" prop="id" align="center"></el-table-column>
-                    <el-table-column label="权限名" prop="name"></el-table-column>
-                </el-table>
-            </el-tab-pane>
-        </el-tabs>
+        <permissions-viewer :permissions="permissionables" :loading="viewDialog.loading()"></permissions-viewer>
         <template #actions>
             <el-button @click="viewDialog.close()">关闭</el-button>
         </template>
@@ -149,6 +112,7 @@ import api from "../../utils/api";
 import MergedColumn from "../../components/columns/MergedColumn.vue";
 import useStatus from "../../states/status";
 import {flatten} from "../../utils/tree";
+import PermissionsViewer from "../../components/miscellaneous/PermissionsViewer.vue";
 
 const status = useStatus()
 
@@ -225,15 +189,10 @@ const openViewDialog = row => {
 }
 
 const permissionables = ref([])
-const viewTab = ref('page')
 
 const refreshPermissionables = () => {
     api('admin_roles', role.value.id, 'permissions').label(viewDialog.label).get().then(res => permissionables.value = res)
 }
-
-const permissionablePages = computed(() => permissionables.value.filter(item => item.permissionable_type === 'App\\Models\\AdminPage'))
-const permissionableMenus = computed(() => permissionables.value.filter(item => item.permissionable_type === 'App\\Models\\AdminMenu'))
-const permissionableRoutes = computed(() => permissionables.value.filter(item => item.permissionable_type === 'App\\Models\\AdminRoute'))
 
 </script>
 
