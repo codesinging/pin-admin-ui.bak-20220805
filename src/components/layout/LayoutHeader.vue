@@ -60,6 +60,7 @@ const logout = () => {
 
     api('auth/logout').label('logout').catch(true).put().finally(() => {
         auth.clear()
+        layout.clear()
         setTimeout(() => router.push(authConfig.login).then(() => screen.hide()), 1000)
     })
 }
