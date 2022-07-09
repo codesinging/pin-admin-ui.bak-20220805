@@ -54,7 +54,6 @@ const useAuth = defineStore('auth', {
 
         check() {
             if (!this._token || !this.user || this.expired()) {
-                this.clear()
                 return false
             }
 
