@@ -13,9 +13,9 @@
             <el-descriptions-item label="ID" label-class-name="w-64">{{ user.id }}</el-descriptions-item>
             <el-descriptions-item label="登录账号" label-class-name="w-64">{{ user.username }}</el-descriptions-item>
             <el-descriptions-item label="用户名称" label-class-name="w-64">{{ user.name }}</el-descriptions-item>
-            <el-descriptions-item label="类型" label-class-name="w-64">
-                <el-tag v-if="user.super" type="success" size="small">超级</el-tag>
-                <el-tag v-else size="small">普通</el-tag>
+            <el-descriptions-item label="超级管理员" label-class-name="w-64">
+                <el-tag v-if="user.super" type="success" size="small">是</el-tag>
+                <el-tag v-else size="small">否</el-tag>
             </el-descriptions-item>
             <el-descriptions-item label="角色" label-class-name="w-64">
                 <div class="space-x-2">
@@ -26,6 +26,10 @@
                 <el-tag v-if="user.status" type="success" size="small">正常</el-tag>
                 <el-tag v-else type="danger" size="small">禁用</el-tag>
             </el-descriptions-item>
+            <el-descriptions-item label="登录次数" label-class-name="w-64">{{ user.login_count }}</el-descriptions-item>
+            <el-descriptions-item label="最后登录时间" label-class-name="w-64">{{ user.last_login_time }}</el-descriptions-item>
+            <el-descriptions-item label="最后登录IP" label-class-name="w-64">{{ user.last_login_ip }}</el-descriptions-item>
+            <el-descriptions-item label="错误登录次数" label-class-name="w-64">{{ user.login_error_count }}</el-descriptions-item>
             <el-descriptions-item label="创建时间" label-class-name="w-64">{{ user.created_at }}</el-descriptions-item>
             <el-descriptions-item label="更新时间" label-class-name="w-64">{{ user.updated_at }}</el-descriptions-item>
         </el-descriptions>

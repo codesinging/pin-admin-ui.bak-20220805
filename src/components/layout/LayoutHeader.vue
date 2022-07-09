@@ -19,12 +19,12 @@
                 </div>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item @click="openPage('/user/home')"><i class="bi-person mr-1"></i>个人中心</el-dropdown-item>
-                        <el-dropdown-item @click="openPage('/user/logins')"><i class="bi-person mr-1"></i>登录日志</el-dropdown-item>
-                        <el-dropdown-item @click="openPage('/user/logs')"><i class="bi-person mr-1"></i>操作日志</el-dropdown-item>
-                        <el-dropdown-item @click="openPage('/user/permissions')"><i class="bi-person mr-1"></i>权限列表</el-dropdown-item>
-                        <el-dropdown-item @click="openPage('/user/profile')" divided><i class="bi-person mr-1"></i>修改信息</el-dropdown-item>
-                        <el-dropdown-item @click="openPage('/user/password')"><i class="bi-person mr-1"></i>修改密码</el-dropdown-item>
+                        <el-dropdown-item @click="openPage('/user/home')"><i class="bi-house mr-1"></i>个人中心</el-dropdown-item>
+                        <el-dropdown-item @click="openPage('/user/logins')"><i class="bi-door-open mr-1"></i>登录日志</el-dropdown-item>
+                        <el-dropdown-item @click="openPage('/user/logs')"><i class="bi-file-earmark-text mr-1"></i>操作日志</el-dropdown-item>
+                        <el-dropdown-item @click="openPage('/user/permissions')"><i class="bi-shield-check mr-1"></i>权限列表</el-dropdown-item>
+                        <el-dropdown-item @click="openPage('/user/profile')" divided><i class="bi-postcard mr-1"></i>修改信息</el-dropdown-item>
+                        <el-dropdown-item @click="openPage('/user/password')"><i class="bi-key mr-1"></i>修改密码</el-dropdown-item>
                         <el-dropdown-item @click="logout" divided><i class="bi-power mr-1"></i>退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>

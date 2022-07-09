@@ -10,6 +10,9 @@
                     </div>
                 </template>
             </el-table-column>
+            <el-table-column label="登录次数" prop="login_count" align="center"></el-table-column>
+            <el-table-column label="最后登录时间" prop="last_login_time" align="center"></el-table-column>
+            <el-table-column label="登录错误次数" prop="login_error_count" align="center"></el-table-column>
             <status-column/>
             <el-table-column label="角色和权限" align="center">
                 <template #default="{row}">
@@ -20,6 +23,10 @@
                     </div>
                 </template>
             </el-table-column>
+        </template>
+
+        <template #action-buttons="{row}">
+            <el-button size="small" type="warning" link @click="onReset(row)" :loading="status.status.reset">重置</el-button>
         </template>
 
         <template #form-items="{data, isUpdate}">
@@ -100,6 +107,7 @@ import ExtendedDialog from "../../components/extensions/ExtendedDialog.vue";
 import api from "../../utils/api";
 import PermissionsViewer from "../../components/miscellaneous/PermissionsViewer.vue";
 import PermissionsSelector from "../../components/miscellaneous/PermissionsSelector.vue";
+import {confirm} from "../../utils/messageBox.js";
 
 const status = useStatus()
 
@@ -171,6 +179,12 @@ const permissionables = ref([])
 
 const refreshPermissionables = () => {
     api('admin_users', user.value.id, 'permissions').label(permissionableDialog.label).get().then(res => permissionables.value = res)
+}
+
+const onReset = (row) => {
+    confirm('确定要重置该用户的错误登录次数吗？').then(() => {
+        api('admin_users', row.id, 'reset').label('reset').put().then(() => view.value.refresh())
+    }).catch(() => void 0)
 }
 </script>
 
