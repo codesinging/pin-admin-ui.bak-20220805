@@ -61,44 +61,7 @@
         :width="80"
         :top="20"
     >
-        <el-tabs v-model="permissionTab" type="card" class="mb-4">
-            <el-tab-pane label="页面权限" name="page">
-                <el-table ref="pageTable" :data="pages" border table-layout="auto" v-loading="permissionLoading" @selection-change="onPageSelectionChange">
-                    <el-table-column type="index" align="center"></el-table-column>
-                    <el-table-column label="页面名称" prop="name"></el-table-column>
-                    <el-table-column label="页面路径" prop="path"></el-table-column>
-                    <el-table-column label="权限ID" prop="permission.id" align="center"></el-table-column>
-                    <el-table-column label="权限名" prop="permission.name"></el-table-column>
-                    <el-table-column type="selection" align="center"></el-table-column>
-                </el-table>
-            </el-tab-pane>
-            <el-tab-pane label="菜单权限" name="menu">
-                <el-table ref="menuTable" :data="menus" border table-layout="auto" v-loading="permissionLoading" @selection-change="onMenuSelectionChange">
-                    <el-table-column type="index" align="center"></el-table-column>
-                    <el-table-column label="菜单名称">
-                        <template #default="{row}">
-                            <span v-for="i in row.depth" class="inline-block w-4"></span>
-                            <span>{{ row.name }}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="页面名称" prop="page.name"></el-table-column>
-                    <el-table-column label="页面路径" prop="page.path"></el-table-column>
-                    <el-table-column label="权限ID" prop="permission.id" align="center"></el-table-column>
-                    <el-table-column label="权限名" prop="permission.name"></el-table-column>
-                    <el-table-column type="selection" align="center"></el-table-column>
-                </el-table>
-            </el-tab-pane>
-            <el-tab-pane label="路由权限" name="route">
-                <el-table ref="routeTable" :data="routes" border table-layout="auto" v-loading="permissionLoading" @selection-change="onRouteSelectionChange">
-                    <el-table-column type="index" align="center"></el-table-column>
-                    <merged-column label="控制器名-动作名" :props="['controller_name', 'action_name']" merger="-"></merged-column>
-                    <merged-column label="控制器-动作" :props="['controller', 'action']" merger="@"></merged-column>
-                    <el-table-column label="权限ID" prop="permission.id" align="center"></el-table-column>
-                    <el-table-column label="权限名" prop="permission.name"></el-table-column>
-                    <el-table-column type="selection" align="center"></el-table-column>
-                </el-table>
-            </el-tab-pane>
-        </el-tabs>
+        <permissions-selector v-model="permissionIds"></permissions-selector>
 
         <el-alert type="warning" :closable="false">注：此处是为用户设置直接权限，推荐通过角色为用户设置权限。</el-alert>
 
@@ -135,9 +98,8 @@ import useDialog from "../../utils/dialog";
 import {Peoples, Permissions} from "@icon-park/vue-next";
 import ExtendedDialog from "../../components/extensions/ExtendedDialog.vue";
 import api from "../../utils/api";
-import {flatten} from "../../utils/tree";
-import MergedColumn from "../../components/columns/MergedColumn.vue";
 import PermissionsViewer from "../../components/miscellaneous/PermissionsViewer.vue";
+import PermissionsSelector from "../../components/miscellaneous/PermissionsSelector.vue";
 
 const status = useStatus()
 
@@ -179,21 +141,7 @@ const saveRoles = () => {
 
 const permissionDialog = useDialog('设置权限', Permissions)
 
-const pages = ref([])
-const menus = ref([])
-const routes = ref([])
-
-const selectedPages = ref([])
-const selectedMenus = ref([])
-const selectedRoutes = ref([])
-
-const permissions = ref([])
-
-const pageTable = ref()
-const menuTable = ref()
-const routeTable = ref()
-
-const permissionTab = ref('page')
+const permissionIds = ref([])
 
 const openPermissionDialog = row => {
     user.value = row
@@ -202,41 +150,13 @@ const openPermissionDialog = row => {
 }
 
 const refreshPermissions = () => {
-    Promise.all([
-        api('admin_users', user.value.id, 'permissions').label('permissions').success(false).get({direct: true}),
-        api('admin_pages').label('pages').success(false).list({public: false}),
-        api('admin_menus').label('menus').success(false).list({public: false}),
-        api('admin_routes').label('routes').success(false).list({public: false}),
-    ]).then(responses => {
-        permissions.value = responses[0]
-        pages.value = responses[1]
-        menus.value = flatten(responses[2])
-        routes.value = responses[3]
-
-        nextTick(() => initPermissionSelection())
-    })
+    api('admin_users', user.value.id, 'permissions').label('permissions').success(false).get({direct: true}).then(res => permissionIds.value = res.map(item => item.id))
 }
 
-const initPermissionSelection = () => {
-    const permissionIds = permissions.value.map(item => item.id)
-
-    pages.value.filter(item => permissionIds.includes(item.permission.id)).forEach(item => pageTable.value.toggleRowSelection(item, true))
-    menus.value.filter(item => permissionIds.includes(item.permission.id)).forEach(item => menuTable.value.toggleRowSelection(item, true))
-    routes.value.filter(item => permissionIds.includes(item.permission.id)).forEach(item => routeTable.value.toggleRowSelection(item, true))
-}
-
-const onPageSelectionChange = selection => selectedPages.value = selection
-const onMenuSelectionChange = selection => selectedMenus.value = selection
-const onRouteSelectionChange = selection => selectedRoutes.value = selection
-
-const permissionLoading = computed(() => status.any('permissions', 'pages', 'menus', 'routes'))
+const permissionLoading = computed(() => status.status.permissions)
 
 const savePermissions = () => {
-    const permissionIds = [].concat(selectedPages.value.map(item => item.permission.id))
-        .concat(selectedMenus.value.map(item => item.permission.id))
-        .concat(selectedRoutes.value.map(item => item.permission.id))
-
-    api('admin_users', user.value.id, 'permit').label('save').put({permissions: permissionIds}).then(() => permissionDialog.close())
+    api('admin_users', user.value.id, 'permit').label('save').put({permissions: permissionIds.value}).then(() => permissionDialog.close())
 }
 
 const permissionableDialog = useDialog('查看权限', Permissions)
