@@ -6,11 +6,9 @@
             </el-breadcrumb>
         </div>
         <div v-if="user" class="flex items-center space-x-2 h-full">
-            <el-tooltip placement="bottom" :content="isFullscreen?'退出全屏':'全屏显示'">
-                <div @click="toggleFullscreen" class="w-8 h-8 rounded-full hover:bg-gray-200 flex items-center justify-center cursor-pointer">
-                    <component :is="isFullscreen ? OffScreen : FullScreen" :stroke-width="3" :size="18"/>
-                </div>
-            </el-tooltip>
+            <div class="pr-3 flex items-center">
+                <remind-box/>
+            </div>
             <el-dropdown>
                 <div class="flex items-center space-x-1 cursor-pointer">
                     <el-avatar :size="32" :src="user.avatar" :icon="User"></el-avatar>
@@ -29,6 +27,11 @@
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
+            <el-tooltip placement="bottom" :content="isFullscreen?'退出全屏':'全屏显示'">
+                <div @click="toggleFullscreen" class="w-8 h-8 rounded-full hover:bg-gray-200 flex items-center justify-center cursor-pointer">
+                    <component :is="isFullscreen ? OffScreen : FullScreen" :stroke-width="3" :size="18"/>
+                </div>
+            </el-tooltip>
         </div>
     </div>
 </template>
@@ -37,12 +40,13 @@
 import useLayout from "../../states/layout";
 import {useFullscreen} from "@vueuse/core";
 import {computed} from "vue";
-import {FullScreen, OffScreen, User} from "@icon-park/vue-next";
+import {FullScreen, OffScreen, Remind, User} from "@icon-park/vue-next";
 import {useRouter} from "vue-router";
 import useScreen from "../../states/screen";
 import {authConfig} from "../../config";
 import useAuth from "../../states/auth.js";
 import api from "../../utils/api.js";
+import RemindBox from "../miscellaneous/RemindBox.vue";
 
 const layout = useLayout()
 const router = useRouter()
