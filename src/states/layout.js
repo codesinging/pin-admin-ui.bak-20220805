@@ -120,6 +120,25 @@ const useLayout = defineStore('layout', {
             }
         },
 
+        removeTab(tab) {
+            if (tab.id === this.homeTab.id) {
+                return false
+            }
+
+            let index = this.tabs.findIndex(item => item.id === tab.id)
+
+            this.tabs.splice(index, 1)
+
+            if (tab.id === this.activeTab?.id) {
+                this.activateTab(this.tabs[index] || this.tabs[this.tabs.length - 1])
+            }
+        },
+
+        closePage(page = null) {
+            page = page || this.activeTab
+            this.removeTab(page)
+        },
+
         selectMenu(index) {
             const menu = this.findMenuById(index)
             this.activateMenu(menu)
@@ -149,13 +168,12 @@ const useLayout = defineStore('layout', {
         },
 
         init(route) {
-            const page = this.findPageByPath(route.path)
-
-            if (page) {
-                this.addTab(page)
-                this.activateTab(page)
-                this.activateMenu(this.findMenuByPageId(page.id))
+            const page = this.findPageByPath(route.path) || {
+                id: -1,
+                name: '禁止访问',
+                path: route.path,
             }
+            this.openPage(page)
         },
 
         clear() {

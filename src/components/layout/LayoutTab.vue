@@ -46,17 +46,7 @@ const router = useRouter()
 const activeTabId = ref(layout.activeTab?.id)
 
 const removeTab = tab => {
-    if (tab.id === layout.homeTab.id) {
-        return false
-    }
-
-    let index = layout.tabs.findIndex(item => item.id === tab.id)
-
-    layout.tabs.splice(index, 1)
-
-    if (tab.id === activeTabId.value) {
-        activeTabId.value = (layout.tabs[index] || layout.tabs[layout.tabs.length - 1])?.id
-    }
+    layout.removeTab(tab)
 }
 
 const onTabRemove = id => {

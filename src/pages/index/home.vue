@@ -10,7 +10,7 @@
                     <div class="space-x-1">
                         <el-tag v-if="user.super" type="danger" size="small">超级管理员</el-tag>
                         <template v-else>
-                            <el-tag v-for="role in user.roles" :key="role.id" size="small" type="primary">{{ role.name }}</el-tag>
+                            <el-tag v-for="role in user.roles" :key="role.id" size="small">{{ role.name }}</el-tag>
                         </template>
                     </div>
                 </div>
