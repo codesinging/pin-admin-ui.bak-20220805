@@ -10,9 +10,6 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column label="登录次数" prop="login_count" align="center"></el-table-column>
-            <el-table-column label="最后登录时间" prop="last_login_time" align="center"></el-table-column>
-            <el-table-column label="登录错误次数" prop="login_error_count" align="center"></el-table-column>
             <status-column/>
             <el-table-column label="角色和权限" align="center">
                 <template #default="{row}">
