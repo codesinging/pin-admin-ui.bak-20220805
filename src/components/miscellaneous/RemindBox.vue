@@ -36,9 +36,9 @@ import {computed, ref} from "vue";
 
 const tab = ref('notice')
 
-const notices = ref([1])
+const notices = ref([])
 
-const messages = ref([2,3])
+const messages = ref([])
 
 const total = computed(() => notices.value.length + messages.value.length)
 

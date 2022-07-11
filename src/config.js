@@ -9,7 +9,7 @@ export const storageConfig = {
 }
 
 export const authConfig = {
-    expire: 3600000,
+    expire: 3600 * 1000,
     login: '/login',
     forbidden: '/forbidden',
     tokenKey: 'auth_token',

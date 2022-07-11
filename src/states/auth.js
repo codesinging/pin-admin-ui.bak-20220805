@@ -20,7 +20,6 @@ const useAuth = defineStore('auth', {
 
         token(){
             if (this.expired()){
-                this.clear()
                 return null
             }
 
