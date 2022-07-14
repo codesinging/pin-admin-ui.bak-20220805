@@ -9,12 +9,12 @@
 </template>
 
 <script setup>
-import useLayout from "../../states/layout.js";
 import {computed} from "vue";
+import {useRoute} from "vue-router";
 
-const layout = useLayout()
+const route = useRoute()
 
-const subTitle = computed(() => `没有访问当前页面(${layout.activeTab.path})的权限`)
+const subTitle = computed(() => `该账号没有访问当前页面(${route.path})的权限`)
 </script>
 
 <style scoped>

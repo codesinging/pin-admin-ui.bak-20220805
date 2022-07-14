@@ -121,7 +121,7 @@ const useLayout = defineStore('layout', {
         },
 
         removeTab(tab) {
-            if (tab.id === this.homeTab.id) {
+            if (tab.id === this.homeTab?.id) {
                 return false
             }
 
