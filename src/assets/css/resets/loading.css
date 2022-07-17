@@ -1,0 +1,9 @@
+.v-loading .el-loading-mask .el-loading-spinner{
+    top: auto !important;
+    margin-top: auto !important;
+}
+
+.v-loading .el-loading-mask .el-loading-spinner .circular{
+    width: auto !important;
+    height: auto !important;
+}
