@@ -88,11 +88,16 @@ const handle = (request, config) => {
     // 为了避免原请求 Promise 中没有响应结果也会执行 then 回调，重新封装一层 Promise。
     return new Promise((resolve, reject) => {
         request.then(res => {
-            if (res.status === 200 && res?.data?.code === 0) {
-                showSuccess(res?.data?.message, config)
-                if (res?.data?.data !== undefined) {
-                    resolve(res.data.data)
-                }
+             if (res.status === 200) {
+                 if (res?.data?.code === 0){
+                     showSuccess(res?.data?.message, config)
+                     if (res?.data?.data !== undefined) {
+                         resolve(res.data.data)
+                     }
+                 } else {
+                     showSuccess(res?.statusText, config)
+                     resolve(res.data)
+                 }
             } else {
                 let error = `[${res.data?.code}]${res.data.message || res.statusText || '请求响应结果错误'}`
 

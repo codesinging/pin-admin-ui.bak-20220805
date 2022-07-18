@@ -13,6 +13,11 @@ class Api {
         return this
     }
 
+    origin() {
+        this._config.origin = true
+        return this
+    }
+
     label(label) {
         this._config.label = label
         return this
