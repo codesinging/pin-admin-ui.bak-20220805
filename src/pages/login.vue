@@ -92,7 +92,7 @@ const refreshConfig = () => api('auth/config')
     .get()
     .then(res => {
         captchaEnabled.value = res.captchaEnabled
-        if (captchaEnabled.value){
+        if (captchaEnabled.value) {
             refreshCaptcha()
         }
     })
@@ -119,6 +119,9 @@ const submit = () => {
                 status.set('redirect')
 
                 router.push(appConfig.home).then(() => status.unset('redirect'))
+            }).finally(() => {
+                refreshCaptcha()
+                data.captcha = ''
             })
         } else {
             warning('表单验证未通过，请重新填写')
@@ -128,7 +131,7 @@ const submit = () => {
 </script>
 
 <style>
-.captcha-input .el-input-group__append{
+.captcha-input .el-input-group__append {
     padding: 0 !important;
 }
 </style>
