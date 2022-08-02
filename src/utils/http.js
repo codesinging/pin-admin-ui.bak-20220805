@@ -97,7 +97,7 @@ const handle = (request, config) => {
                 const message = res?.data?.message || res?.message
                 showError(message, config)
                 showLog('[800101]http response code error', message)
-                if (config.custom.catch) {
+                if (config.catch) {
                     reject(message)
                 }
             } else {
