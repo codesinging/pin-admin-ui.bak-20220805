@@ -10,7 +10,6 @@
                     </div>
                 </template>
             </el-table-column>
-            <status-column/>
             <el-table-column label="角色和权限" align="center">
                 <template #default="{row}">
                     <div v-if="!row.super" class="space-x-1">
@@ -20,10 +19,18 @@
                     </div>
                 </template>
             </el-table-column>
-        </template>
-
-        <template #action-buttons="{row}">
-            <el-button size="small" type="warning" link @click="onReset(row)" :loading="status.status.reset">重置</el-button>
+            <el-table-column label="登录次数" prop="login_count" align="center"></el-table-column>
+            <el-table-column label="登录错误次数" align="center">
+                <template #default="scope">
+                    <div class="space-x-1">
+                        <span>{{ scope.row.login_error_count }}</span>
+                        <el-tooltip content="重置登录错误次数" placement="top">
+                            <el-button size="small" type="warning" link @click="onReset(scope)" :icon="Refresh" :loading="view.cellStatus(scope, 'reset')"></el-button>
+                        </el-tooltip>
+                    </div>
+                </template>
+            </el-table-column>
+            <status-column/>
         </template>
 
         <template #form-items="{data, isUpdate}">
@@ -99,7 +106,7 @@ import StatusColumn from "../../components/columns/StatusColumn.vue";
 import {computed, nextTick, ref} from "vue";
 import useStatus from "../../states/status";
 import useDialog from "../../utils/dialog";
-import {Peoples, Permissions} from "@icon-park/vue-next";
+import {Peoples, Permissions, Refresh} from "@icon-park/vue-next";
 import ExtendedDialog from "../../components/extensions/ExtendedDialog.vue";
 import api from "../../utils/api";
 import PermissionsViewer from "../../components/miscellaneous/PermissionsViewer.vue";
@@ -178,9 +185,9 @@ const refreshPermissionables = () => {
     api('admin_users', user.value.id, 'permissions').label(permissionableDialog.label).get().then(res => permissionables.value = res)
 }
 
-const onReset = (row) => {
+const onReset = (scope) => {
     confirm('确定要重置该用户的错误登录次数吗？').then(() => {
-        api('admin_users', row.id, 'reset').label('reset').put().then(() => view.value.refresh())
+        api('admin_users', scope.row.id, 'reset').label(view.value.cellLabel(scope, 'reset')).put().then(() => view.value.refresh())
     }).catch(() => void 0)
 }
 </script>
