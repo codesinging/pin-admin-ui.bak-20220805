@@ -18,7 +18,14 @@
                     <el-tag v-if="row.code!==''" :type="codeType(row.code)">{{ row.code }}</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column label="IP 地址" prop="ip" align="center"></el-table-column>
+            <el-table-column label="IP 地址" align="center">
+                <template #default="{row}">
+                    <div class="space-x-1">
+                        <span>{{row.ip}}</span>
+                        <copy-to-clipboard :text="row.ip"/>
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column label="操作用户" prop="user.name"></el-table-column>
             <created-at-column label="操作时间"/>
         </template>
@@ -29,6 +36,7 @@
 import ModelView from "../../components/views/ModelView.vue";
 import TagColumn from "../../components/columns/TagColumn.vue";
 import CreatedAtColumn from "../../components/columns/CreatedAtColumn.vue";
+import CopyToClipboard from "../../components/miscellaneous/CopyToClipboard.vue";
 
 const types = {
     PUT: 'warning',

@@ -4,7 +4,14 @@
             <el-table-column label="登录账号" prop="user.username"></el-table-column>
             <el-table-column label="登录用户名" prop="user.name"></el-table-column>
             <el-table-column label="登录时间" prop="time" align="center"></el-table-column>
-            <el-table-column label="登录IP" prop="ip" align="center"></el-table-column>
+            <el-table-column label="登录IP" align="center">
+                <template #default="{row}">
+                    <div class="space-x-1">
+                        <span>{{ row.ip }}</span>
+                        <copy-to-clipboard :text="row.ip"/>
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column label="登录结果" align="center">
                 <template #default="{row}">
                     <el-tag v-if="row.result" type="success">成功</el-tag>
@@ -23,6 +30,7 @@
 
 <script setup>
 import ModelView from "../../components/views/ModelView.vue";
+import CopyToClipboard from "../../components/miscellaneous/CopyToClipboard.vue";
 
 const codeType = code => {
     return code === 0 ? 'success' : 'danger'
