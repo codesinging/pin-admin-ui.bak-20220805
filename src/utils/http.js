@@ -88,25 +88,21 @@ const handle = (request, config) => {
     // 为了避免原请求 Promise 中没有响应结果也会执行 then 回调，重新封装一层 Promise。
     return new Promise((resolve, reject) => {
         request.then(res => {
-             if (res.status === 200) {
-                 if (res?.data?.code === 0){
-                     showSuccess(res?.data?.message, config)
-                     if (res?.data?.data !== undefined) {
-                         resolve(res.data.data)
-                     }
-                 } else {
-                     showSuccess(res?.statusText, config)
-                     resolve(res.data)
-                 }
-            } else {
-                let error = `[${res.data?.code}]${res.data.message || res.statusText || '请求响应结果错误'}`
-
-                showError(error, config)
-                showLog('[800100]http response status error', error)
-
-                if (config.catch) {
-                    reject(error)
+            if (res?.data?.code === 0) {
+                showSuccess(res?.data?.message, config)
+                if (res?.data?.data !== undefined) {
+                    resolve(res.data.data)
                 }
+            } else if (res?.data?.code) {
+                const message = res?.data?.message || res?.message
+                showError(message, config)
+                showLog('[800101]http response code error', message)
+                if (config.custom.catch) {
+                    reject(message)
+                }
+            } else {
+                showSuccess(res?.statusText, config)
+                resolve(res.data)
             }
         }).catch(error => {
             let status = error.response?.status || error.status
@@ -121,7 +117,7 @@ const handle = (request, config) => {
                 showError(content, config)
             }
 
-            showLog('[800102]http response error', detail)
+            showLog('[800102]http response status error', detail)
 
             if (config.catch) {
                 reject(content)
