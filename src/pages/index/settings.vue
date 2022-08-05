@@ -10,10 +10,10 @@
             <el-tab-pane v-for="group in groups" :key="group.id" :label="group.name" :name="group.key">
                 <el-descriptions border :column="1">
                     <template v-for="option in options" :key="option.id">
-                        <el-descriptions-item v-if="option.group_id===group.id" :label="option.name" label-class-name="w-80">
+                        <el-descriptions-item v-if="option.group_id===group.id" :label="option.name" label-class-name="w-96">
                             <template #label>
                                 <div class="space-y-1">
-                                    <div class="text-normal">{{ option.name }}</div>
+                                    <div class="text-normal">{{ option.name }} <span class="text-xs text-gray-400">{{ option.key }}</span></div>
                                     <div class="text-xs text-gray-400">{{ option.description }}</div>
                                 </div>
                             </template>
