@@ -15,7 +15,7 @@
                             </template>
                         </div>
                     </div>
-                    <div class="text-sm text-gray-400 divide-x">
+                    <div v-if="lastLogin" class="text-sm text-gray-400 divide-x">
                         <span class="pr-2">上次登录时间：{{ lastLogin.time }}</span>
                         <span class="px-2">上次登录IP：{{ lastLogin.ip }}</span>
                     </div>
@@ -40,7 +40,7 @@ const user = computed(() => auth.user)
 const lastLogin = ref({})
 
 const refreshLastLogin = () => {
-    api('auth/last_login').label('refreshLastLogin').get().then(res => lastLogin.value = res)
+    api('auth/last_login').label('refreshLastLogin').message(false).get().then(res => lastLogin.value = res)
 }
 
 refreshLastLogin()
